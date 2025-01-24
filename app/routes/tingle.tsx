@@ -4,7 +4,6 @@ import { requireUserId } from "~/utils/auth.server";
 import { db } from "~/utils/db.server";
 import { useState, useEffect } from "react";
 import Navbar from "~/components/Navbar";
-import { useRef } from "react";
 
 type LoaderData = {
   user: {
@@ -94,70 +93,80 @@ export default function Dashboard() {
 
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-return (
+  return (
     <div className="min-h-screen bg-gray-900">
       <Navbar userName={data.user.name} />
       
       <div className="flex h-[calc(100vh-64px)]">
+        {/* Hamburger Button */}
+        <button
+          onClick={() => setSidebarOpen(!isSidebarOpen)}
+          className="fixed left-4 top-20 z-20 p-2 rounded-md bg-gray-800 text-white md:hidden"
+          aria-label="Toggle Menu"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isSidebarOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
+
         {/* Sidebar with animation */}
         <div
-          className={`fixed md:static w-16 hover:w-64 bg-gray-800 h-full 
-            transition-all duration-300 ease-in-out transform z-10 group border-r border-gray-700
-            ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+          className={`fixed md:static w-64 bg-gray-800 border-r border-gray-700 h-full transition-transform duration-300 ease-in-out z-10 ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          }`}
         >
-          <div className="p-4 h-full">
-            {/* User Profile Section */}
-            <div className="mb-8 flex items-center space-x-4">
-              <div className="w-10 h-10 rounded-full bg-gray-600 flex-shrink-0 overflow-hidden">
-                <svg className="w-full h-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <span className="text-white hidden group-hover:block whitespace-nowrap">
-                {data.user.name || 'User'}
-              </span>
-
-            </div>
-            {/* Navigation Items */}
-            <div className="space-y-6">
-              <button
-                onClick={() => setActiveTab('profile')}
-                className={`w-full flex items-center space-x-4 p-2 rounded-lg transition-all duration-200
-                  ${activeTab === 'profile' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="hidden group-hover:block whitespace-nowrap">Dashboard</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('activities')}
-                className={`w-full flex items-center space-x-4 p-2 rounded-lg transition-all duration-200
-                  ${activeTab === 'activities' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <span className="hidden group-hover:block whitespace-nowrap">Activities</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('stats')}
-                className={`w-full flex items-center space-x-4 p-2 rounded-lg transition-all duration-200
-                  ${activeTab === 'stats' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span className="hidden group-hover:block whitespace-nowrap">Analytics</span>
-              </button>
+          <div className="p-4">
+            <h1 className="text-2xl font-bold text-white mb-6">Tingle</h1>
+            <div className="space-y-2">
+              {['profile', 'activities', 'stats'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                    activeTab === tab 
+                      ? 'bg-blue-600 text-white' 
+                      : 'text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  <div className="flex items-center">
+                    {tab === 'profile' && (
+                      <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    )}
+                    {tab === 'activities' && (
+                      <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    )}
+                    {tab === 'stats' && (
+                      <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    )}
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -171,14 +180,14 @@ return (
         )}
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto p-8 ml-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="flex-1 overflow-auto p-8 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
           <div className="max-w-4xl mx-auto">
+            {/* Remove the buttons section and keep only the content */}
             {activeTab === 'profile' && (
               <div className="space-y-6">
-                <div className="bg-gray-800 p-6 rounded-lg shadow">
+                <div className="bg-gray-800 p-6 rounded-lg shadow mb-6">
                   <h2 className="text-xl font-semibold mb-4 text-white">Update Profile</h2>
                   <Form method="post" className="space-y-4">
-                    <input type="hidden" name="intent" value="updateProfile" />
                     {actionData?.error && (
                       <div className="text-red-400">{actionData.error}</div>
                     )}

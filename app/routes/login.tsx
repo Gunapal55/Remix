@@ -24,8 +24,15 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg shadow-xl">
-        <h2 className="text-center text-3xl font-bold text-white">Login</h2>
+      <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            Login to Tingle
+          </h1>
+          <p className="text-xl text-gray-300 font-medium">
+            Welcome back
+          </p>
+        </div>
         <Form method="post" className="space-y-6">
           {actionData?.error && (
             <div className="text-red-400 text-center">{actionData.error}</div>

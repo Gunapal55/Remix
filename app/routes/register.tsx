@@ -1,5 +1,5 @@
 import { ActionFunction, json } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, Link } from "@remix-run/react";
 import { createUser, createUserSession } from "~/utils/auth.server";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -25,8 +25,15 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg shadow-xl">
-        <h2 className="text-center text-3xl font-bold text-white">Register</h2>
+      <div className="max-w-md w-full space-y-8 p-8 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            Welcome to Tingle
+          </h1>
+          <p className="text-xl text-gray-300 font-medium">
+            Create your account
+          </p>
+        </div>
         <Form method="post" className="space-y-6">
           {actionData?.error && (
             <div className="text-red-400 text-center">{actionData.error}</div>
@@ -70,12 +77,20 @@ export default function Register() {
               placeholder="Enter your password"
             />
           </div>
+          
           <button
             type="submit"
             className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
           >
             Register
           </button>
+
+          <div className="text-center text-gray-400">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-400 hover:text-blue-300">
+              Login here
+            </Link>
+          </div>
         </Form>
       </div>
     </div>
